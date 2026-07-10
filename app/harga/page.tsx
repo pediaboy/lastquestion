@@ -1,283 +1,210 @@
 'use client'
-
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Check, HelpCircle, AlertCircle, ArrowRight, ShieldCheck, Zap } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Star, Zap } from 'lucide-react'
+import { useState } from 'react'
 
 const packages = [
   {
     name: 'Starter',
-    price: 'Rp500.000',
-    originalPrice: 'Rp1.000.000',
-    desc: 'Solusi dasar super hemat untuk kebutuhan personal, portofolio online, atau profil UMKM baru.',
+    price: '500.000',
+    desc: 'Cocok untuk UMKM, toko kecil, usaha rumahan, freelancer, dan jasa lokal.',
     popular: false,
-    features: [
-      '1 Halaman Sederhana (One-Page)',
-      'Free Domain .my.id / .web.id 1 Thn',
-      'Hosting Standar 500MB',
-      'Desain Menggunakan Template Responsi',
-      'Integrasi Tombol WhatsApp Chat',
-      'Garansi Perbaikan Bug 1 Bulan',
-      'Waktu Pengerjaan 3-5 Hari Kerja'
-    ]
+    features: ['Landing Page Profesional','Maksimal 5 Section','Responsive Mobile','Domain (.my.id atau milik client)','Hosting 1 Tahun','SSL Gratis','WhatsApp Button','Google Maps','Form Kontak','Basic SEO','Kecepatan Website Optimal','Gratis Revisi 2 Kali'],
+    est: '2-4 Hari',
   },
   {
     name: 'Basic',
-    price: 'Rp1.000.000',
-    originalPrice: 'Rp2.000.000',
-    desc: 'Website representatif yang ideal untuk bisnis kecil, portofolio profesional, dan brosur online.',
+    price: '1.000.000',
+    desc: 'Cocok untuk cafe, restoran, klinik, personal branding, dan toko online kecil.',
     popular: false,
-    features: [
-      'Hingga 3 Halaman Utama',
-      'Free Domain Premium (.com / .id) 1 Thn',
-      'Cloud Hosting SSD 1GB Super Cepat',
-      'Desain Modern & Responsif Seluler',
-      'Integrasi Sosial Media & Google Maps',
-      'Optimasi SEO Dasar (Meta Tags)',
-      'Garansi Bug 3 Bulan',
-      'Waktu Pengerjaan 5-7 Hari Kerja'
-    ]
+    features: ['Hingga 5 Halaman','Desain Premium','Responsive','Hosting 1 Tahun','SSL & Domain','Form Booking','WhatsApp Integration','Google Analytics','Google Search Console','Basic On Page SEO','Optimasi Speed','Revisi 3 Kali'],
+    est: '4-7 Hari',
   },
   {
     name: 'Business',
-    price: 'Rp1.500.000',
-    originalPrice: 'Rp3.000.000',
-    desc: 'Pilihan tepat untuk profil korporasi, UMKM menengah, dan instansi yang menginginkan tampilan orisinal.',
+    price: '1.500.000',
+    desc: 'Cocok untuk perusahaan kecil, startup, dan jasa profesional.',
     popular: false,
-    features: [
-      'Hingga 7 Halaman Utama',
-      'Free Domain Premium (.com / .id) 1 Thn',
-      'Cloud Hosting SSD 2GB Super Cepat',
-      'Desain UI/UX Eksklusif (Custom Figma)',
-      'Formulir Hubungi Kami & Lead Capture',
-      'Keamanan SSL Certificate Gratis',
-      'Optimasi Kecepatan PageSpeed 80+',
-      'Garansi Bug 6 Bulan',
-      'Waktu Pengerjaan 7-10 Hari Kerja'
-    ]
+    features: ['Hingga 10 Halaman','Company Profile Premium','CMS Admin','Blog','Testimoni','FAQ & Portfolio','Optimasi SEO','Integrasi WhatsApp','Google Maps','Hosting, Domain & SSL','Backup Otomatis','Revisi 5 Kali'],
+    est: '5-10 Hari',
   },
   {
     name: 'Professional',
-    price: 'Rp3.000.000',
-    originalPrice: 'Rp6.000.000',
-    desc: 'Paket terlaris dengan fitur lengkap, performa premium Next.js 14, serta integrasi e-commerce dasar.',
+    price: '3.000.000',
+    desc: 'Untuk bisnis berkembang yang membutuhkan website profesional dengan fitur lengkap.',
     popular: true,
-    features: [
-      'Hingga 15 Halaman Premium',
-      'Free Domain Premium (.com / .id) 1 Thn',
-      'Premium Cloud Hosting SSD 5GB',
-      'Dibuat dengan Next.js 14 + Tailwind',
-      'Fitur Toko Online / E-Commerce Dasar',
-      'Integrasi WhatsApp API / Auto-Sender',
-      'Skor Kecepatan Google PageSpeed 95+',
-      'Garansi Selamanya (Lifetime Bug Warranty)',
-      'Waktu Pengerjaan 10-14 Hari Kerja'
-    ]
+    features: ['Unlimited Halaman','Dashboard Admin','Artikel Blog','SEO Lengkap','Optimasi Performa','Integrasi Email','WhatsApp API','Sistem Testimoni','Form Dinamis','Galeri Animasi Premium','Hosting Premium & Domain','Backup Otomatis','Training Admin','Revisi Unlimited selama pengerjaan'],
+    est: '7-14 Hari',
   },
   {
     name: 'Enterprise',
-    price: 'Rp5.000.000',
-    originalPrice: 'Rp10.000.000',
-    desc: 'Dibuat khusus untuk korporasi besar yang memerlukan sistem e-commerce penuh dan integrasi pembayaran.',
+    price: '5.000.000',
+    desc: 'Untuk perusahaan menengah yang membutuhkan sistem terintegrasi dan manajemen lengkap.',
     popular: false,
-    features: [
-      'Halaman Tidak Terbatas (Unlimited)',
-      'Free Domain Premium (.com / .id / .co.id)',
-      'Premium VPS Cloud Hosting 10GB',
-      'Teknologi Next.js 14 App Router',
-      'Sistem E-Commerce Lengkap & Cart',
-      'Payment Gateway (Midtrans/Xendit/Duitku)',
-      'Kalkulator Ongkos Kirim Otomatis',
-      'Optimasi SEO On-Page Tingkat Lanjut',
-      'Garansi Selamanya (Lifetime Bug Warranty)',
-      'Waktu Pengerjaan 14-20 Hari Kerja'
-    ]
+    features: ['Semua fitur Professional','Multi User','Dashboard Lengkap','CRM Sederhana','Customer Management','Invoice & Laporan','Database','API Integration','Telegram & WhatsApp Notification','Email Notification','Security Premium','Backup Harian','CDN & Optimasi Server'],
+    est: '10-20 Hari',
   },
   {
     name: 'Corporate',
-    price: 'Rp7.500.000',
-    originalPrice: 'Rp15.000.000',
-    desc: 'Sistem multi-aplikasi canggih dengan dashboard interaktif untuk pengelolaan data operasional berskala besar.',
+    price: '7.500.000',
+    desc: 'Untuk perusahaan besar yang membutuhkan sistem ERP dan manajemen skala besar.',
     popular: false,
-    features: [
-      'Sistem Database Custom / Multi-Relasi',
-      'Next.js 14 + Prisma + PostgreSQL/MySQL',
-      'Dashboard Admin Eksklusif & Analitik',
-      'Sistem Manajemen Pengguna (Role-Based)',
-      'Manajemen Konten Custom (CMS Internal)',
-      'Integrasi Bot Telegram / Notifikasi WA',
-      'Keamanan Maksimal (DDOS Protection)',
-      'Dokumentasi Kode & Desain Lengkap',
-      'Garansi Selamanya (Lifetime Bug Warranty)',
-      'Waktu Pengerjaan 20-30 Hari Kerja'
-    ]
+    features: ['Custom Dashboard','ERP Sederhana','Multi Role Login','Approval Workflow','Analytics Dashboard','Export Excel & PDF','Integrasi API','Database Besar','Server Optimization','High Security','Audit Log','Maintenance 3 Bulan','Prioritas Support'],
+    est: '14-25 Hari',
   },
   {
     name: 'Premium',
-    price: 'Rp10.000.000',
-    originalPrice: 'Rp20.000.000',
-    desc: 'Aplikasi web kustom berkinerja ekstrim dengan integrasi AI, multi-bahasa, serta skalabilitas tanpa batas.',
+    price: '10.000.000',
+    desc: 'Untuk startup dan perusahaan digital yang membutuhkan otomasi dan integrasi penuh.',
     popular: false,
-    features: [
-      'Semua Fitur Paket Corporate',
-      'Integrasi AI (OpenAI API / LLM Custom)',
-      'Sistem Multi-Bahasa (Localization)',
-      'Optimasi Arsitektur Database Super Besar',
-      'Kecepatan Respon Database <50ms',
-      'Setup CI/CD Otomatis ke Server Produksi',
-      'Dukungan Teknis Prioritas 24/7',
-      'Garansi Selamanya (Lifetime Bug Warranty)',
-      'Waktu Pengerjaan 30-45 Hari Kerja'
-    ]
+    features: ['Semua fitur Corporate','AI Automation','WhatsApp & Telegram & Email Automation','Payment Gateway','Midtrans/Xendit Integration','Multi Database','Admin Dashboard Premium','Sistem Membership','Login Google & OTP','SEO Advanced','Lighthouse 95+','Maintenance 6 Bulan'],
+    est: '20-35 Hari',
   },
   {
     name: 'Ultimate',
-    price: 'Rp15.000.000',
-    originalPrice: 'Rp30.000.000',
-    desc: 'Situs web kustom berkecepatan dewa, fitur tak terbatas, performa ultra, didukung tim arsitek sistem terbaik kami.',
+    price: '15.000.000',
+    desc: 'Untuk enterprise, SaaS, marketplace, dan aplikasi web skala besar.',
     popular: false,
-    features: [
-      'Fitur Custom Tanpa Batasan Apapun',
-      'Infrastruktur Cloud Khusus (AWS / GCP)',
-      'Arsitektur Microservices Profesional',
-      'Sistem Keamanan Tingkat Tinggi (SOC 2)',
-      'Desain UI/UX oleh Art Director Khusus',
-      'Konsultasi Tatap Muka / Online Mingguan',
-      'Dukungan Dedicated Developer 3 Bulan',
-      'Garansi Selamanya (Lifetime Bug Warranty)',
-      'Waktu Pengerjaan Sesuai Timeline Kesepakatan'
-    ]
-  }
+    features: ['Custom System Full','ERP + CRM + POS','Membership & Subscription','Multi Vendor & Multi Branch','AI Assistant','Chat System','Real Time Dashboard','Payment Gateway + Invoice Otomatis','Telegram Bot + WhatsApp API','Email Server','Integrasi API Unlimited','Cloud & Vercel Deployment','Database Optimization','Backup Otomatis & Monitoring','Security Enterprise','Dokumentasi Lengkap','Maintenance 12 Bulan','Priority Support 24/7','Source Code Full'],
+    est: '20-45 Hari',
+  },
 ]
 
 const addons = [
-  { name: 'Tambah Halaman Tambahan', price: 'Rp100.000 / halaman', desc: 'Penambahan halaman di luar kuota paket yang dipilih.' },
-  { name: 'Sistem Multi-Bahasa (English/Indonesian)', price: 'Rp1.000.000', desc: 'Translasi dinamis untuk seluruh halaman website.' },
-  { name: 'Integrasi Payment Gateway Otomatis', price: 'Rp1.500.000', desc: 'Menerima pembayaran otomatis via Transfer Bank, E-Wallet, & Alfamart/Indomaret.' },
-  { name: 'Sistem WhatsApp Blast / Notifikasi', price: 'Rp500.000', desc: 'Kirim notifikasi transaksi otomatis ke nomor WhatsApp pembeli Anda.' },
-  { name: 'Maintenance & Optimasi Bulanan', price: 'Rp300.000 / bulan', desc: 'Pencadangan data mingguan, pembaruan plugin/sistem, serta perbaikan berkala.' },
-  { name: 'Optimasi SEO Bulanan (Peringkat Google)', price: 'Rp3.000.000 / bulan', desc: 'Riset keyword bulanan, penulisan artikel SEO, backlink berkualitas tinggi.' }
+  { name: 'Logo Design', price: 'Rp250.000' },
+  { name: 'Copywriting Website', price: 'Rp300.000' },
+  { name: 'Artikel SEO', price: 'Rp150.000/artikel' },
+  { name: 'Maintenance Bulanan', price: 'Rp300.000/bulan' },
+  { name: 'Hosting Premium', price: 'Mulai Rp500.000/tahun' },
+  { name: 'Domain .COM', price: 'Mulai Rp250.000/tahun' },
+  { name: 'Domain .ID', price: 'Mulai Rp350.000/tahun' },
+  { name: 'Integrasi Midtrans', price: 'Rp750.000' },
+  { name: 'Integrasi Xendit', price: 'Rp750.000' },
+  { name: 'Integrasi RajaOngkir', price: 'Rp500.000' },
+  { name: 'WhatsApp API', price: 'Mulai Rp750.000' },
+  { name: 'Telegram Bot', price: 'Rp500.000' },
+  { name: 'Sistem Membership', price: 'Rp1.500.000' },
+  { name: 'Dashboard Admin Custom', price: 'Mulai Rp2.000.000' },
+  { name: 'AI Chatbot', price: 'Mulai Rp2.500.000' },
+  { name: 'SEO Advanced', price: 'Mulai Rp2.000.000' },
+  { name: 'Optimasi Kecepatan', price: 'Rp750.000' },
 ]
 
-export default function Pricing() {
-  const [billingCycle, setBillingCycle] = useState('one-time') // 'one-time' or 'maintenance'
+const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }
 
+export default function HargaPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const faqs = [
+    { q: 'Apakah harga sudah termasuk domain dan hosting?', a: 'Mulai paket Starter sudah termasuk domain dan hosting 1 tahun. Detail lengkap ada di daftar fitur masing-masing paket.' },
+    { q: 'Bagaimana jika saya membutuhkan fitur di luar paket?', a: 'Kami menyediakan layanan Add-On dan paket Custom yang bisa disesuaikan dengan kebutuhan spesifik Anda.' },
+    { q: 'Apakah ada biaya tambahan setelah project selesai?', a: 'Tidak ada biaya tersembunyi. Biaya tambahan hanya muncul jika Anda memilih perpanjangan hosting, domain, atau maintenance.' },
+  ]
   return (
-    <div className="py-16 relative">
-      <div className="absolute top-1/4 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="min-h-screen pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h1 className="text-4xl sm:text-5xl font-black text-white mb-6 tracking-tight leading-tight">
-            PILIHAN PAKET HARGA TRANSPARAN
-          </h1>
-          <p className="text-gray-400 text-lg leading-relaxed">
-            Tidak ada biaya tersembunyi. Semua paket dibuat dengan standar kualitas premium untuk mendorong kesuksesan bisnis Anda di ranah digital.
-          </p>
-        </div>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
+          <div className="text-indigo-400 text-sm font-medium mb-3 tracking-widest uppercase">Harga Transparan</div>
+          <h1 className="text-5xl md:text-6xl font-black mb-4">Pilihan <span className="text-gradient">Paket</span></h1>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">Pilih paket yang sesuai dengan kebutuhan dan anggaran bisnis Anda. Semua paket dapat dikustomisasi.</p>
+        </motion.div>
 
-        {/* Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Packages Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {packages.map((pkg, i) => (
             <motion.div
               key={pkg.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: (i % 4) * 0.05 }}
-              className={`glass-card p-6 flex flex-col justify-between relative overflow-hidden ${
-                pkg.popular ? 'border-indigo-500/60 shadow-[0_0_30px_rgba(99,102,241,0.2)] bg-indigo-950/5' : ''
-              }`}
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: i * 0.07 } } }}
+              className={`glass-card rounded-2xl p-6 flex flex-col relative ${pkg.popular ? 'border border-indigo-500/60 shadow-xl shadow-indigo-500/10' : ''}`}
             >
               {pkg.popular && (
-                <div className="absolute top-4 right-4 bg-gradient-to-r from-indigo-500 to-violet-600 text-white font-extrabold text-[10px] uppercase px-3 py-1.5 rounded-full tracking-wider flex items-center gap-1 shadow-md animate-pulse">
-                  <Zap className="w-3 h-3" />
-                  <span>Paling Populer</span>
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold px-4 py-1 rounded-full flex items-center gap-1">
+                  <Star className="w-3 h-3" /> PALING POPULER
                 </div>
               )}
-
-              <div>
-                {/* Name */}
-                <h3 className="text-xl font-bold text-white mb-2">{pkg.name}</h3>
-                
-                {/* Pricing info */}
-                <div className="mb-4">
-                  <span className="text-[11px] text-gray-500 line-through block">{pkg.originalPrice}</span>
-                  <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-3xl font-black text-white">{pkg.price}</span>
-                    <span className="text-xs text-gray-400 font-medium">/ Sekali bayar</span>
-                  </div>
-                </div>
-
-                <p className="text-gray-400 text-xs leading-relaxed mb-6 border-b border-white/5 pb-6">
-                  {pkg.desc}
-                </p>
-
-                {/* Features List */}
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((feat, idx) => (
-                    <li key={idx} className="flex items-start text-xs text-gray-300">
-                      <Check className="w-4 h-4 text-indigo-400 shrink-0 mr-2" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
+              <div className="mb-4">
+                <div className="text-gray-400 text-xs uppercase tracking-wider mb-1">{pkg.name}</div>
+                <div className="text-2xl font-black text-white">Rp{pkg.price}</div>
+                <div className="text-gray-500 text-xs mt-0.5">Estimasi {pkg.est}</div>
               </div>
-
-              {/* Order CTA */}
-              <Link
-                href={`/pesan?paket=${pkg.name}`}
-                className={`w-full py-3.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 transition-all ${
-                  pkg.popular 
-                    ? 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white shadow-lg' 
-                    : 'bg-white/5 border border-white/10 hover:bg-indigo-600 hover:border-indigo-600 text-white'
-                }`}
-              >
-                <span>Pilih Paket {pkg.name}</span>
-                <ArrowRight className="w-4 h-4" />
+              <p className="text-gray-400 text-xs mb-4 leading-relaxed">{pkg.desc}</p>
+              <ul className="space-y-2 mb-6 flex-1">
+                {pkg.features.slice(0, 8).map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-xs text-gray-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+                {pkg.features.length > 8 && (
+                  <li className="text-xs text-indigo-400">+{pkg.features.length - 8} fitur lainnya</li>
+                )}
+              </ul>
+              <Link href={`/pesan?paket=${pkg.name}`} className={`block text-center py-2.5 rounded-lg text-sm font-semibold transition-all ${pkg.popular ? 'btn-glow text-white' : 'border border-white/10 text-gray-300 hover:bg-white/5'}`}>
+                Pesan Sekarang
               </Link>
             </motion.div>
           ))}
         </div>
 
-        {/* Add-on Section */}
-        <div className="mt-24">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-black text-white mb-4">ADD-ON & FITUR TAMBAHAN</h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base">
-              Kostumisasi website Anda dengan fitur-fitur premium tambahan sesuai kebutuhan fungsional spesifik bisnis Anda.
-            </p>
+        {/* Add-Ons */}
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mb-20">
+          <div className="text-center mb-10">
+            <div className="text-indigo-400 text-sm font-medium mb-2 tracking-widest uppercase">Tambahan Layanan</div>
+            <h2 className="text-3xl font-black mb-2">Fitur <span className="text-gradient">Add-On</span></h2>
+            <p className="text-gray-400 text-sm">Lengkapi website Anda dengan fitur tambahan sesuai kebutuhan.</p>
           </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {addons.map((a, i) => (
+              <motion.div
+                key={a.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="glass-card rounded-xl p-4 hover:border-indigo-500/30 transition-all"
+              >
+                <div className="text-white font-medium text-sm mb-1">{a.name}</div>
+                <div className="text-indigo-400 text-xs font-semibold">{a.price}</div>
+              </motion.div>
+            ))}
+          </div>
+          <p className="text-gray-500 text-xs text-center mt-6 max-w-2xl mx-auto">
+            * Seluruh harga di atas merupakan harga mulai (starting from). Harga akhir dapat berubah sesuai kompleksitas fitur, desain, integrasi pihak ketiga, serta kebutuhan bisnis klien.
+          </p>
+        </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {addons.map((addon, i) => (
-              <div key={i} className="glass-card p-6 flex flex-col justify-between">
-                <div>
-                  <h4 className="font-bold text-white text-base mb-2">{addon.name}</h4>
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4">{addon.desc}</p>
-                </div>
-                <div className="border-t border-white/5 pt-4 flex justify-between items-center mt-auto">
-                  <span className="text-[10px] uppercase tracking-wider text-gray-500 font-bold">Investasi</span>
-                  <span className="text-sm font-black text-indigo-400">{addon.price}</span>
-                </div>
+        {/* FAQ */}
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-black text-center mb-8 text-gradient">FAQ Harga</h2>
+          <div className="space-y-3">
+            {faqs.map((f, i) => (
+              <div key={i} className="glass-card rounded-xl overflow-hidden">
+                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full text-left px-5 py-4 flex items-center justify-between">
+                  <span className="text-white font-medium text-sm">{f.q}</span>
+                  <Zap className={`w-4 h-4 text-indigo-400 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+                </button>
+                {openFaq === i && (
+                  <div className="px-5 pb-4 text-gray-400 text-sm leading-relaxed border-t border-white/5 pt-3">{f.a}</div>
+                )}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Disclaimer / Notes */}
-        <div className="mt-16 glass-card p-6 border-indigo-500/20 bg-indigo-950/5 flex flex-col sm:flex-row items-start gap-4 max-w-4xl mx-auto">
-          <AlertCircle className="w-6 h-6 text-indigo-400 shrink-0 mt-0.5" />
-          <div className="text-xs text-gray-400 leading-relaxed space-y-2">
-            <h5 className="font-bold text-white text-sm">Catatan Penting Pembayaran & Ketentuan Jasa:</h5>
-            <p>1. Seluruh paket membutuhkan Pembayaran Uang Muka (DP) sebesar 50% sebelum pengerjaan project dimulai.</p>
-            <p>2. Perpanjangan tahun berikutnya hanya dikenakan biaya sewa domain dan hosting berkisar Rp250.000 s/d Rp1.500.000 per tahun tergantung paket yang dipilih.</p>
-            <p>3. Lifetime Bug Warranty berlaku penuh selama website Anda tidak dimodifikasi oleh pihak eksternal dan tetap dihosting di infrastruktur server milik kami.</p>
+        {/* CTA */}
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mt-16">
+          <div className="glass-card neon-border rounded-3xl p-10 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-black mb-3 text-gradient">Butuh Paket Custom?</h2>
+            <p className="text-gray-400 mb-6">Ceritakan kebutuhan Anda dan kami akan membuat penawaran yang tepat.</p>
+            <Link href="/kontak" className="btn-glow text-white font-bold px-8 py-3.5 rounded-xl inline-flex items-center gap-2">
+              Diskusi Sekarang <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )
