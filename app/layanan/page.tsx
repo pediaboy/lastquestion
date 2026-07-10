@@ -1,215 +1,237 @@
 'use client'
-import dynamic from 'next/dynamic'
-import Link from 'next/link'
+
 import { motion } from 'framer-motion'
-import { useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import FadeUp, { Stagger, SI } from '../components/FadeUp'
-import Logo from '../components/Logo'
-import BottomNav from '../components/BottomNav'
-import { defaultServices } from '../lib/data'
+import Link from 'next/link'
+import { 
+  Globe, ShoppingCart, GraduationCap, Building, Key, MapPin, 
+  BookOpen, HeartPulse, Cpu, Search, Sparkles, MessageCircle, 
+  Lock, ArrowRight, Layers, Newspaper, Calendar, Landmark, 
+  Plane, UtensilsCrossed, MonitorCheck
+} from 'lucide-react'
 
-const Stars  = dynamic(() => import('../components/Stars'),  { ssr: false })
-const Nebula = dynamic(() => import('../components/Nebula'), { ssr: false })
-
-const PAYMENT_METHODS = [
-  { id: 'qris',           label: 'QRIS (Semua e-wallet)' },
-  { id: 'bni_va',         label: 'Virtual Account BNI' },
-  { id: 'bri_va',         label: 'Virtual Account BRI' },
-  { id: 'cimb_niaga_va',  label: 'Virtual Account CIMB' },
-  { id: 'permata_va',     label: 'Virtual Account Permata' },
-  { id: 'paypal',         label: 'PayPal' },
+const services = [
+  {
+    icon: ShoppingCart,
+    name: 'Website E-Commerce Premium',
+    desc: 'Toko online eksklusif dengan performa kilat, keranjang belanja interaktif, kalkulator ongkir otomatis (RajaOngkir), dan payment gateway terintegrasi untuk konversi penjualan terbaik.',
+    benefits: ['Payment gateway instan (Midtrans/Xendit)', 'Kalkulasi ongkir real-time', 'Panel admin manajemen produk', 'Notifikasi transaksi via WhatsApp'],
+    duration: '10-14 Hari Kerja',
+    price: 'Rp5.000.000'
+  },
+  {
+    icon: GraduationCap,
+    name: 'Sistem Manajemen Sekolah (LMS)',
+    desc: 'Platform pembelajaran digital terpadu untuk instansi pendidikan. Menyediakan ruang kelas virtual, modul tugas online, rekap absensi, dan ujian online terautomasi.',
+    benefits: ['Ujian online (CBT) anti-curang', 'Portal wali murid dan siswa', 'Sistem pembayaran SPP online', 'Laporan nilai otomatis (Raport)'],
+    duration: '14-21 Hari Kerja',
+    price: 'Rp7.500.000'
+  },
+  {
+    icon: Key,
+    name: 'Website Reservasi Kamar Hotel',
+    desc: 'Sistem booking penginapan langsung tanpa perantara. Memudahkan tamu memeriksa ketersediaan kamar secara real-time, memesan tipe kamar, serta melakukan checkout aman.',
+    benefits: ['Kalender ketersediaan kamar interaktif', 'Add-on layanan (penjemputan/sarapan)', 'Invoice digital otomatis via email', 'Sistem kupon diskon dinamis'],
+    duration: '10-14 Hari Kerja',
+    price: 'Rp5.000.000'
+  },
+  {
+    icon: UtensilsCrossed,
+    name: 'Sistem Pemesanan Restoran & Menu QR',
+    desc: 'Digitalisasi menu restoran Anda. Memungkinkan pelanggan memesan hidangan langsung dari meja mereka melalui pemindaian kode QR serta membayar instan.',
+    benefits: ['Menu interaktif bergambar premium', 'Sistem antrean dapur real-time', 'Pesanan cetak langsung ke printer dapur', 'Opsi pembayaran e-wallet lengkap'],
+    duration: '7-10 Hari Kerja',
+    price: 'Rp3.000.000'
+  },
+  {
+    icon: Building,
+    name: 'Website Company Profile Eksklusif',
+    desc: 'Representasi digital premium untuk korporasi Anda. Dirancang untuk memancarkan profesionalisme tinggi guna membangun kepercayaan klien dan mitra bisnis global.',
+    benefits: ['Desain UI/UX orisinal berkelas tinggi', 'Kecepatan akses super kilat', 'Formulir kemitraan interaktif', 'Integrasi Google Maps & profil tim'],
+    duration: '5-7 Hari Kerja',
+    price: 'Rp1.500.000'
+  },
+  {
+    icon: Globe,
+    name: 'Landing Page Konversi Tinggi (Squeeze Page)',
+    desc: 'Satu halaman fokus tinggi yang dirancang khusus untuk mempromosikan satu produk atau layanan demi memicu tindakan (CTA) maksimal dari pengunjung website.',
+    benefits: ['Skor kecepatan Google PageSpeed 99+', 'Bebas biaya maintenance tahunan', 'Formulir leads terintegrasi Google Sheet', 'Desain responsif ramah smartphone'],
+    duration: '3-5 Hari Kerja',
+    price: 'Rp1.000.000'
+  },
+  {
+    icon: Landmark,
+    name: 'Sistem Informasi Desa & Kecamatan',
+    desc: 'Portal resmi transparansi publik untuk pemerintahan daerah. Membantu warga mengurus surat administrasi online, memantau program desa, dan membaca info terkini.',
+    benefits: ['Sistem administrasi surat mandiri', 'Papan statistik kependudukan interaktif', 'Galeri transparansi anggaran APBDes', 'Sistem pengaduan warga digital'],
+    duration: '10-14 Hari Kerja',
+    price: 'Rp5.000.000'
+  },
+  {
+    icon: MonitorCheck,
+    name: 'Dashboard ERP & HRIS Kustom',
+    desc: 'Sistem monitoring operasional internal perusahaan. Pantau kehadiran staf, manajemen cuti, penggajian (payroll), inventaris, hingga analitik keuntungan harian.',
+    benefits: ['Sistem rekap absensi berbasis GPS', 'Slip gaji PDF otomatis terkirim', 'Analitik grafik penjualan real-time', 'Level akses bertingkat (Role user)'],
+    duration: '21-30 Hari Kerja',
+    price: 'Rp15.000.000'
+  },
+  {
+    icon: HeartPulse,
+    name: 'Portal Reservasi Klinik & Telemedicine',
+    desc: 'Solusi digital terintegrasi untuk klinik atau rumah sakit. Pasien dapat membuat janji temu dengan dokter spesifik, berkonsultasi, dan memantau rekam medis.',
+    benefits: ['Jadwal dokter real-time', 'Rekam medis digital aman (RME)', 'Integrasi video call telekonsultasi', 'Notifikasi pengingat via WhatsApp'],
+    duration: '14-21 Hari Kerja',
+    price: 'Rp7.500.000'
+  },
+  {
+    icon: BookOpen,
+    name: 'Sistem Kursus Online (E-Learning)',
+    desc: 'Situs web keanggotaan premium untuk menjual materi kursus Anda sendiri. Unggah video terlindungi, kelola kuis, serta terbitkan sertifikat digital otomatis.',
+    benefits: ['Pemutar video aman (anti-download)', 'Sistem langganan (membership) bulanan', 'Pembuatan sertifikat kelulusan dinamis', 'Forum diskusi antar siswa dan mentor'],
+    duration: '10-14 Hari Kerja',
+    price: 'Rp5.000.000'
+  },
+  {
+    icon: Plane,
+    name: 'Portal Agen Travel & Reservasi Wisata',
+    desc: 'Website pencarian paket liburan terlengkap. Pengunjung dapat memilih paket tour, melakukan kostumisasi tanggal, memesan, serta melakukan pembayaran aman.',
+    benefits: ['Manajemen paket tour lengkap', 'Integrasi API tiket/hotel eksternal', 'Sistem ulasan & rating dari pelanggan', 'Invoice PDF otomatis terkirim'],
+    duration: '10-14 Hari Kerja',
+    price: 'Rp5.000.000'
+  },
+  {
+    icon: Search,
+    name: 'Jasa Optimasi SEO Premium bulanan',
+    desc: 'Layanan optimasi mesin pencari komprehensif. Meningkatkan posisi website Anda di halaman pertama Google demi mendatangkan ribuan pengunjung organik berkualitas.',
+    benefits: ['Audit teknikal & on-page menyeluruh', 'Riset kata kunci kompetitor mendalam', 'Optimasi konten artikel berkala', 'Laporan bulanan progres peringkat'],
+    duration: 'Setiap Bulan',
+    price: 'Rp3.000.000'
+  }
 ]
 
-function CheckIcon() {
+export default function Services() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  )
-}
+    <div className="py-16 relative">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
 
-function CheckoutModal({ svc, onClose }: { svc: typeof defaultServices[0]; onClose: () => void }) {
-  const [form, setForm]   = useState({ name: '', email: '', paymentMethod: 'qris' })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleSubmit = async () => {
-    if (!form.name.trim() || !form.email.trim()) { setError('Nama dan email wajib diisi.'); return }
-    setLoading(true); setError('')
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          serviceId: svc.id, serviceName: svc.title, amount: svc.price,
-          paymentMethod: form.paymentMethod, customerName: form.name, customerEmail: form.email,
-        }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Checkout gagal.')
-      // Redirect to Pakasir payment page
-      if (data.payment?.payment_url) {
-        window.location.href = data.payment.payment_url
-      } else {
-        window.location.href = `/checkout/${data.orderId}/success`
-      }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Terjadi kesalahan.')
-      setLoading(false)
-    }
-  }
-
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 2000,
-        background: 'rgba(3,1,10,0.92)', backdropFilter: 'blur(16px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
-      }}
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}>
-      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-        transition={{ ease: [0.22, 1, 0.36, 1] }}
-        className="glass" style={{ borderRadius: 22, padding: '28px', width: '100%', maxWidth: 440, maxHeight: '90vh', overflowY: 'auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 22 }}>
-          <div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-1)' }}>{svc.title}</div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent-2)', marginTop: 2 }}>{svc.priceLabel}</div>
-          </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', padding: 6 }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-4"
+          >
+            <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+            <span>20+ Solusi Digital Eksklusif</span>
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl sm:text-5xl font-black text-white mb-6 tracking-tight leading-tight"
+          >
+            LAYANAN PENGEMBANGAN WEBSITE PREMIUM
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 text-lg leading-relaxed"
+          >
+            Dari website company profile elegan hingga sistem kustom berskala enterprise, kami menghadirkan kode yang bersih dan visual mewah kelas dunia.
+          </motion.p>
         </div>
-        {['name', 'email'].map(k => (
-          <div key={k} style={{ marginBottom: 12 }}>
-            <label style={{ display: 'block', fontSize: 10, fontWeight: 700, color: 'var(--text-3)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 5 }}>
-              {k === 'name' ? 'Nama Lengkap' : 'Alamat Email'}
-            </label>
-            <input className="inp" type={k === 'email' ? 'email' : 'text'}
-              placeholder={k === 'name' ? 'Nama kamu' : 'email@domain.com'}
-              value={form[k as 'name' | 'email']}
-              onChange={e => setForm(p => ({ ...p, [k]: e.target.value }))}
-            />
-          </div>
-        ))}
-        <div style={{ marginBottom: 18 }}>
-          <label style={{ display: 'block', fontSize: 10, fontWeight: 700, color: 'var(--text-3)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Metode Pembayaran</label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {PAYMENT_METHODS.map(m => (
-              <label key={m.id} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10,
-                padding: '11px 14px', borderRadius: 10,
-                border: `1px solid ${form.paymentMethod === m.id ? 'var(--accent)' : 'var(--border)'}`,
-                background: form.paymentMethod === m.id ? 'rgba(124,58,237,0.12)' : 'rgba(6,2,15,0.6)',
-                transition: 'all 0.18s',
-              }}>
-                <input type="radio" name="pm" value={m.id} checked={form.paymentMethod === m.id}
-                  onChange={() => setForm(p => ({ ...p, paymentMethod: m.id }))} style={{ display: 'none' }} />
-                <div style={{
-                  width: 14, height: 14, borderRadius: '50%',
-                  border: `2px solid ${form.paymentMethod === m.id ? 'var(--accent)' : 'var(--text-3)'}`,
-                  background: form.paymentMethod === m.id ? 'var(--accent)' : 'transparent',
-                  flexShrink: 0,
-                }} />
-                <span style={{ fontSize: 12, color: 'var(--text-2)', fontWeight: 600 }}>{m.label}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-        {error && <div style={{ fontSize: 12, color: '#ff4060', marginBottom: 14, padding: '10px 12px', borderRadius: 8, background: 'rgba(255,64,96,0.08)' }}>{error}</div>}
-        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={handleSubmit} disabled={loading}
-          style={{
-            width: '100%', padding: '14px', borderRadius: 12, border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
-            background: 'linear-gradient(135deg, var(--purple-hi), var(--accent-dim))',
-            color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'inherit',
-            opacity: loading ? 0.7 : 1,
-          }}>
-          {loading ? 'Memproses...' : 'Lanjut ke Pembayaran'}
-        </motion.button>
-        <p style={{ fontSize: 10, color: 'var(--text-3)', textAlign: 'center', marginTop: 12, lineHeight: 1.6 }}>
-          Dengan melanjutkan, kamu menyetujui{' '}
-          <Link href="/sk" style={{ color: 'var(--accent)', fontWeight: 700, textDecoration: 'none' }}>Syarat dan Ketentuan</Link>{' '}kami.
-        </p>
-      </motion.div>
-    </motion.div>
-  )
-}
 
-function LayananContent() {
-  const params = useSearchParams()
-  const focusId = params.get('id')
-  const [selected, setSelected] = useState<typeof defaultServices[0] | null>(null)
-
-  return (
-    <main style={{ position: 'relative', width: '100%', overflowX: 'hidden', minHeight: '100vh', paddingBottom: 100 }}>
-      <Stars /><Nebula />
-      {selected && <CheckoutModal svc={selected} onClose={() => setSelected(null)} />}
-      <header style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 500, padding: '0 20px', height: 60,
-        display: 'flex', alignItems: 'center', background: 'rgba(3,1,10,0.85)', backdropFilter: 'blur(24px)',
-        borderBottom: '1px solid rgba(124,58,237,0.1)',
-      }}>
-        <Link href="/" style={{ textDecoration: 'none' }}><Logo size="sm" /></Link>
-      </header>
-      <div style={{ position: 'relative', zIndex: 10, padding: '80px 20px 40px', maxWidth: 900, margin: '0 auto' }}>
-        <FadeUp style={{ textAlign: 'center', marginBottom: 48, paddingTop: 20 }}>
-          <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: 3, color: 'var(--accent)', marginBottom: 12, textTransform: 'uppercase' }}>Detail Layanan</div>
-          <h1 style={{ fontSize: 'clamp(26px, 6vw, 52px)', fontWeight: 900, letterSpacing: -1.5, marginBottom: 12 }}>
-            <span className="grad">Semua Layanan</span>
-          </h1>
-          <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.8, maxWidth: 480, margin: '0 auto' }}>
-            Deskripsi lengkap setiap layanan. Klik pesan untuk langsung checkout.
-          </p>
-        </FadeUp>
-
-        <Stagger style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {defaultServices.map(svc => (
-            <SI key={svc.id}>
-              <motion.div whileHover={{ scale: 1.005 }} className="glass" style={{
-                borderRadius: 20, padding: '24px 22px',
-                border: (svc.popular || svc.id === focusId) ? '1px solid rgba(167,139,250,0.4)' : '1px solid var(--border)',
-                boxShadow: svc.id === focusId ? '0 0 48px rgba(124,58,237,0.2)' : 'none',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 14 }}>
-                  <div>
-                    {svc.popular && (
-                      <div style={{ fontSize: 8, fontWeight: 800, letterSpacing: 1.5, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: 6 }}>TERPOPULER</div>
-                    )}
-                    <h2 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-1)', marginBottom: 3 }}>{svc.title}</h2>
-                    <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>{svc.subtitle}</div>
+        {/* Grid of Services */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((svc, i) => {
+            const Icon = svc.icon
+            return (
+              <motion.div
+                key={svc.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
+                className="glass-card p-8 flex flex-col justify-between group"
+              >
+                <div>
+                  {/* Icon */}
+                  <div className="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 w-fit mb-6 group-hover:bg-indigo-500/20 group-hover:scale-110 transition-all">
+                    <Icon className="w-6 h-6" />
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 24, fontWeight: 900, color: 'var(--accent-2)', letterSpacing: -0.5 }}>{svc.priceLabel}</div>
-                    <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                      onClick={() => setSelected(svc)}
-                      style={{
-                        marginTop: 10, padding: '10px 22px', borderRadius: 10, border: 'none', cursor: 'pointer',
-                        background: 'linear-gradient(135deg, var(--purple-hi), var(--accent-dim))',
-                        color: '#fff', fontSize: 12, fontWeight: 700, fontFamily: 'inherit',
-                        boxShadow: '0 4px 20px var(--glow-sm)',
-                      }}>Pesan</motion.button>
-                  </div>
+
+                  {/* Title & Description */}
+                  <h3 className="text-xl font-bold text-white mb-4 group-hover:text-indigo-400 transition-colors">
+                    {svc.name}
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                    {svc.desc}
+                  </p>
+
+                  {/* Benefits */}
+                  <ul className="space-y-2.5 mb-8 border-t border-white/5 pt-6">
+                    {svc.benefits.map((benefit, idx) => (
+                      <li key={idx} className="flex items-start text-xs text-gray-300">
+                        <span className="mr-2 text-indigo-500 font-bold">✔</span>
+                        <span>{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 18 }}>{svc.description}</p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
-                  {svc.features.map(f => (
-                    <div key={f} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                      <CheckIcon />
-                      <span style={{ fontSize: 12, color: 'var(--text-2)' }}>{f}</span>
+
+                {/* Footer Section */}
+                <div className="border-t border-white/5 pt-6 mt-auto">
+                  <div className="flex justify-between items-center text-xs mb-4 text-gray-400">
+                    <div>
+                      <p className="text-[10px] uppercase font-bold tracking-wider">Pengerjaan</p>
+                      <p className="font-semibold text-white mt-0.5">{svc.duration}</p>
                     </div>
-                  ))}
+                    <div className="text-right">
+                      <p className="text-[10px] uppercase font-bold tracking-wider">Harga Mulai</p>
+                      <p className="font-black text-indigo-400 text-sm mt-0.5">{svc.price}</p>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/pesan?paket=${encodeURIComponent(svc.name)}`}
+                    className="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs flex items-center justify-center space-x-2 group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all"
+                  >
+                    <span>Pesan Sekarang</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
                 </div>
               </motion.div>
-            </SI>
-          ))}
-        </Stagger>
-      </div>
-      <BottomNav />
-    </main>
-  )
-}
+            )
+          })}
+        </div>
 
-export default function LayananPage() {
-  return <Suspense fallback={null}><LayananContent /></Suspense>
+        {/* Custom ERP Request */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="mt-20 neon-border p-1"
+        >
+          <div className="neon-border-inner p-8 sm:p-12 text-center flex flex-col items-center">
+            <h3 className="text-2xl sm:text-3xl font-black text-white mb-4">
+              Butuh Sistem Custom yang Tidak Tercantum di Atas?
+            </h3>
+            <p className="text-gray-400 max-w-2xl mb-8 text-sm sm:text-base">
+              Tim arsitek sistem kami siap membangun solusi ERP kustom, API integrasi pihak ketiga, sistem pergudangan, hingga portal multi-aplikasi sesuai kebutuhan unik bisnis Anda.
+            </p>
+            <Link
+              href="/kontak"
+              className="px-8 py-4 rounded-full text-sm font-bold btn-glow-primary flex items-center space-x-2"
+            >
+              <span>Diskusikan Kebutuhan Anda</span>
+              <ArrowRight className="w-4.5 h-4.5" />
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  )
 }
