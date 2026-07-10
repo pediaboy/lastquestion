@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  package     String
+  amount      Float
+  status      String   @default("waiting_payment")
+  invoices    Invoice[]
+  payments    Payment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  invoiceNumber String   @unique
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id])
+  amount        Float
+  status        String   @default("unpaid")
+  createdAt     DateTime @default(now())
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  orderId   String
+  order         Order    @relation(fields: [orderId], references: [id])
+  amount    Float
+  method    String
+  proofUrl  String?
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+}
+
+model Portfolio {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  description String
+  imageUrl    String?
+  techStack   String
+  clientName  String?
+  createdAt   DateTime @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  excerpt     String
+  category    String
+  imageUrl    String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  company   String
+  role      String
+  content   String
+  rating    Int
+  imageUrl  String?
+  createdAt DateTime @default(now())
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
