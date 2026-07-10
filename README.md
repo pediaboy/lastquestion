@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LASTQUESTION (Premium Web Development Agency)
 
-## Getting Started
+Situs web premium instan kelas dunia untuk **LASTQUESTION**, agensi pengembangan web eksklusif yang memfokuskan pada pembuatan situs web performa tinggi dengan konversi maksimal.
 
-First, run the development server:
+## Fitur Utama
+1. **Premium & Modern UI**: Menggunakan Next.js 14 App Router, Tailwind CSS, Framer Motion, dan custom glassmorphism.
+2. **20+ Detail Layanan**: Terintegrasi penuh dengan estimasi pengerjaan, harga, dan CTA yang persuasif.
+3. **8 Paket Harga Komprehensif + Add-ons**: Memudahkan klien memilih sesuai skala bisnis mereka.
+4. **Halaman Portofolio Interaktif**: Filter dinamis berbasis kategori (UMKM, Restaurant, Company, Dashboard, dll.).
+5. **Halaman Kontak Cerdas**: Input formulir lengkap, opsi dropdown interaktif, dan jam operasional.
+6. **Sistem Pemesanan Mandiri (Self-Service Order)**: Halaman Invoice & order otomatis dengan metode transfer instan (SeaBank / DANA) dan unggah bukti pembayaran.
+7. **Notifikasi Telegram Otomatis**: Integrasi API bot Telegram untuk notifikasi bukti pembayaran secara real-time ke administrator.
+8. **Prisma ORM + SQLite**: Pengelolaan database lokal yang siap di-migrate ke server produksi PostgreSQL/MySQL kapan saja.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
+- **Framework**: Next.js 14 (App Router, Server Components)
+- **Styling**: Tailwind CSS, Framer Motion, Lucide Icons, next-themes (Dark mode premium)
+- **Form Handling**: React Hook Form, Zod, @hookform/resolvers
+- **Database**: Prisma Client + SQLite
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cara Menjalankan Project secara Lokal
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone repositori ini:
+   ```bash
+   git clone https://github.com/pediaboy/lastquestion.git
+   cd lastquestion
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Instal dependensi:
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. Konfigurasi Environment:
+   Salin berkas `.env.example` ke `.env` dan isi token Telegram Anda jika diperlukan:
+   ```bash
+   cp .env.example .env
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Setup Database & Prisma Migrations:
+   ```bash
+   npx prisma db push
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Jalankan server pengembangan:
+   ```bash
+   npm run dev
+   ```
+   Buka [http://localhost:3000](http://localhost:3000) di browser Anda.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Hak Cipta
+© 2026 LASTQUESTION. Seluruh hak cipta dilindungi undang-undang.
