@@ -1,273 +1,255 @@
 'use client'
-import dynamic from 'next/dynamic'
-import Link from 'next/link'
+
 import { motion } from 'framer-motion'
-import FadeUp, { Stagger, SI } from './components/FadeUp'
-import Logo from './components/Logo'
-import BottomNav from './components/BottomNav'
-import { defaultServices, defaultFAQs } from './lib/data'
-import { useState } from 'react'
+import Link from 'next/link'
+import HeroSection from '@/components/HeroSection'
+import { 
+  Rocket, Shield, Award, Sparkles, Cpu, Compass, CheckCircle2, 
+  HelpCircle, ArrowRight, Zap, Target, HeartHandshake, Smile, RefreshCw
+} from 'lucide-react'
 
-const Stars  = dynamic(() => import('./components/Stars'),  { ssr: false })
-const Nebula = dynamic(() => import('./components/Nebula'), { ssr: false })
+// Stats
+const stats = [
+  { value: '500+', label: 'Project Selesai' },
+  { value: '99%', label: 'Kepuasan Klien' },
+  { value: '7+', label: 'Tahun Pengalaman' },
+  { value: '24/7', label: 'Support Responsif' }
+]
 
-function SLabel({ text }: { text: string }) {
+// Why Choose Us
+const features = [
+  {
+    icon: Rocket,
+    title: 'Ultra Performa & Speed',
+    desc: 'Kami menggunakan Next.js 14 premium untuk memastikan website Anda dimuat dalam hitungan milidetik. Kecepatan maksimal setara standar global.'
+  },
+  {
+    icon: Shield,
+    title: 'Keamanan Super Ketat',
+    desc: 'Dilengkapi sertifikasi SSL, pertahanan dari serangan DDoS, dan struktur kode aman untuk menjamin seluruh data transaksi bisnis Anda aman.'
+  },
+  {
+    icon: Award,
+    title: 'Desain Eksklusif (No-Template)',
+    desc: 'Setiap pixel dirancang khusus secara orisinal agar merefleksikan identitas premium brand Anda secara sempurna dan mewah.'
+  },
+  {
+    icon: Sparkles,
+    title: 'Konversi Maksimal',
+    desc: 'Pendekatan UI/UX berbasis riset psikologi konsumen untuk memastikan setiap pengunjung website diarahkan menjadi pembeli setia.'
+  },
+  {
+    icon: Cpu,
+    title: 'Arsitektur Skala Besar',
+    desc: 'Struktur database dan backend modern yang siap menampung lonjakan jutaan traffic secara bersamaan tanpa kendala.'
+  },
+  {
+    icon: Compass,
+    title: 'Optimasi SEO Kelas Dunia',
+    desc: 'Dilengkapi kaidah SEO on-page termutakhir agar website bisnis Anda langsung meroket ke peringkat teratas pencarian Google.'
+  }
+]
+
+// How It Works
+const steps = [
+  { step: '01', title: 'Konsultasi & Strategi', desc: 'Kami menganalisis target market Anda dan merumuskan cetak biru (blueprint) website terbaik.' },
+  { step: '02', title: 'Desain UI/UX Mewah', desc: 'Pembuatan visual website premium yang estetis, fungsional, dan interaktif menggunakan Figma.' },
+  { step: '03', title: 'Pengembangan Next.js', desc: 'Menyusun kode program berkinerja ultra tinggi, animasi halus, dan integrasi backend tanpa celah.' },
+  { step: '04', title: 'Peluncuran & Optimasi', desc: 'Proses testing ketat, rilis ke server produksi, diikuti optimasi SEO penuh untuk hasil terbaik.' }
+]
+
+// Tech Stack
+const techStack = [
+  'Next.js 14', 'React 18', 'TypeScript', 'TailwindCSS', 
+  'Framer Motion', 'Prisma ORM', 'SQLite', 'Node.js', 
+  'PostgreSQL', 'Vercel', 'AWS', 'Telegram API'
+]
+
+// FAQ Preview
+const faqPreview = [
+  { q: 'Mengapa menggunakan Next.js 14 dibandingkan CMS biasa seperti WordPress?', a: 'Next.js 14 menawarkan performa kecepatan berkali-kali lipat lebih cepat, keamanan tanpa celah karena bersifat static-site generation, skalabilitas tanpa batas, serta optimasi SEO yang jauh lebih unggul di mata Google.' },
+  { q: 'Berapa lama estimasi pengerjaan untuk satu website?', a: 'Sangat bervariasi tergantung kompleksitas. Paket Landing Page dapat selesai dalam waktu 3-5 hari kerja, sementara sistem custom berskala enterprise membutuhkan waktu 14 hingga 30 hari kerja.' },
+  { q: 'Apakah harga yang tertera sudah termasuk hosting dan domain?', a: 'Ya, seluruh paket yang kami tawarkan sudah termasuk gratis domain premium (.com/.id) dan cloud hosting super cepat selama tahun pertama.' },
+  { q: 'Bagaimana sistem pembayaran di LASTQUESTION?', a: 'Sistem pembayaran menggunakan uang muka (DP) sebesar 50% untuk memulai project, dan pelunasan sebesar 50% dilakukan setelah seluruh website selesai dikembangkan dan siap dideploy.' },
+  { q: 'Apakah ada garansi jika terjadi kendala pada website?', a: 'Kami memberikan garansi kerusakan dan perlindungan penuh dari bug selamanya (Lifetime Warranty) selama website dihosting di server rekomendasi kami.' }
+]
+
+export default function Home() {
   return (
-    <div style={{
-      fontSize: 9, fontWeight: 800, letterSpacing: 3, textTransform: 'uppercase',
-      color: 'var(--accent)', marginBottom: 12,
-      display: 'flex', alignItems: 'center', gap: 8,
-    }}>
-      <div style={{ width: 24, height: 1, background: 'var(--accent)', opacity: 0.5 }} />
-      {text}
-      <div style={{ width: 24, height: 1, background: 'var(--accent)', opacity: 0.5 }} />
-    </div>
-  )
-}
+    <div className="relative overflow-hidden">
+      {/* Hero */}
+      <HeroSection />
 
-function CheckIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  )
-}
-
-function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div className="glass" style={{ borderRadius: 14, overflow: 'hidden' }}>
-      <button onClick={() => setOpen(p => !p)} style={{
-        width: '100%', padding: '16px 18px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        background: 'transparent', border: 'none', cursor: 'pointer',
-        color: 'var(--text-1)', fontSize: 13, fontWeight: 600, fontFamily: 'inherit', textAlign: 'left', gap: 12,
-      }}>
-        <span>{q}</span>
-        <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.2 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round">
-            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </motion.div>
-      </button>
-      <motion.div initial={false} animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }} style={{ overflow: 'hidden' }}
-        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
-        <div style={{ padding: '0 18px 16px', fontSize: 12, lineHeight: 1.85, color: 'var(--text-2)' }}>{a}</div>
-      </motion.div>
-    </div>
-  )
-}
-
-export default function HomePage() {
-  return (
-    <main style={{ position: 'relative', width: '100%', overflowX: 'hidden', minHeight: '100vh', paddingBottom: 100 }}>
-      <Stars />
-      <Nebula />
-
-      {/* Top bar */}
-      <header style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 500,
-        padding: '0 20px', height: 60,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: 'rgba(3,1,10,0.85)', backdropFilter: 'blur(24px)',
-        borderBottom: '1px solid rgba(124,58,237,0.1)',
-      }}>
-        <Logo size="sm" />
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <a href="https://instagram.com/lastquestion.co" target="_blank" rel="noopener noreferrer"
-            style={{ color: 'var(--text-3)', textDecoration: 'none', fontSize: 11, fontWeight: 600, letterSpacing: 0.3 }}>
-            Instagram
-          </a>
-          <a href="https://wa.me/6289663874700" target="_blank" rel="noopener noreferrer"
-            style={{ textDecoration: 'none' }}>
-            <div style={{
-              padding: '6px 14px', borderRadius: 999,
-              background: 'linear-gradient(135deg, var(--purple-hi), var(--accent))',
-              color: '#fff', fontSize: 11, fontWeight: 700,
-              boxShadow: '0 0 16px var(--glow-sm)',
-            }}>WhatsApp</div>
-          </a>
-        </div>
-      </header>
-
-      {/* HERO */}
-      <section style={{
-        position: 'relative', zIndex: 10,
-        minHeight: '100svh',
-        display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: 'center',
-        textAlign: 'center', padding: '80px 20px 80px',
-      }}>
-        <motion.div initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ marginBottom: 32 }}>
-          <Logo size="lg" />
-        </motion.div>
-
-        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-          style={{ fontSize: 'clamp(32px, 8vw, 72px)', fontWeight: 900, letterSpacing: -2, lineHeight: 1.05, marginBottom: 18 }}>
-          <span className="grad">Solusi Digital</span>
-          <br />
-          <span style={{ color: 'var(--text-2)', fontWeight: 400, fontSize: '0.65em' }}>untuk bisnis yang tidak kompromi</span>
-        </motion.h1>
-
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.7 }}
-          style={{ fontSize: 14, color: 'var(--text-2)', maxWidth: 440, lineHeight: 1.85, marginBottom: 40 }}>
-          Web development, desain, dan konsultasi teknologi. Kami tidak mengerjakan semua hal —
-          kami mengerjakan hal-hal tertentu dengan sangat baik.
-        </motion.p>
-
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.65, duration: 0.6 }}
-          style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Link href="/layanan" style={{ textDecoration: 'none' }}>
-            <motion.div whileHover={{ scale: 1.04, boxShadow: '0 0 48px rgba(124,58,237,0.5)' }} whileTap={{ scale: 0.97 }}
-              style={{
-                padding: '13px 30px', borderRadius: 12,
-                background: 'linear-gradient(135deg, var(--purple-hi), var(--accent-dim))',
-                color: '#fff', fontSize: 13, fontWeight: 700,
-                boxShadow: '0 4px 28px var(--glow)', cursor: 'pointer',
-              }}>
-              Lihat Layanan
-            </motion.div>
-          </Link>
-          <a href="https://wa.me/6289663874700" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-              className="glass"
-              style={{ padding: '13px 26px', borderRadius: 12, cursor: 'pointer', color: 'var(--text-2)', fontSize: 13, fontWeight: 600 }}>
-              Konsultasi Gratis
-            </motion.div>
-          </a>
-        </motion.div>
-
-        {/* Scroll cue */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}
-          style={{ position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)' }}>
-          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}
-            style={{ width: 1, height: 40, background: 'linear-gradient(to bottom, var(--accent), transparent)', margin: '0 auto' }} />
-        </motion.div>
-      </section>
-
-      {/* SERVICES GRID */}
-      <section style={{ position: 'relative', zIndex: 10, padding: '0 20px 80px', maxWidth: 900, margin: '0 auto' }}>
-        <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-          <SLabel text="Layanan Kami" />
-          <h2 style={{ fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 800, letterSpacing: -1, marginBottom: 10 }}>
-            Yang Kami Kerjakan
-          </h2>
-          <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.8 }}>
-            Pilih layanan yang sesuai dengan kebutuhan dan skala bisnis Anda.
-          </p>
-        </FadeUp>
-
-        <Stagger style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 12 }}>
-          {defaultServices.map(svc => (
-            <SI key={svc.id}>
-              <motion.div whileHover={{ scale: 1.02, boxShadow: '0 8px 40px rgba(124,58,237,0.22)' }}
-                className="glass" style={{
-                  borderRadius: 18, padding: '22px 20px', height: '100%',
-                  display: 'flex', flexDirection: 'column',
-                  border: svc.popular ? '1px solid rgba(167,139,250,0.4)' : '1px solid var(--border)',
-                  position: 'relative', overflow: 'hidden',
-                }}>
-                {svc.popular && (
-                  <div style={{
-                    position: 'absolute', top: 14, right: 14,
-                    padding: '3px 10px', borderRadius: 999,
-                    background: 'linear-gradient(135deg, var(--purple-hi), var(--accent-dim))',
-                    fontSize: 8, fontWeight: 800, color: '#fff', letterSpacing: 1.2,
-                  }}>TERPOPULER</div>
-                )}
-                <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>{svc.category}</div>
-                <div style={{ fontSize: 17, fontWeight: 800, marginBottom: 4, color: 'var(--text-1)' }}>{svc.title}</div>
-                <div style={{ fontSize: 11, color: 'var(--accent)', marginBottom: 10, fontWeight: 600 }}>{svc.subtitle}</div>
-                <p style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.7, marginBottom: 16, flex: 1 }}>{svc.description}</p>
-                <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent-2)', letterSpacing: -0.5, marginBottom: 14 }}>{svc.priceLabel}</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 18 }}>
-                  {svc.features.slice(0, 4).map(f => (
-                    <div key={f} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                      <CheckIcon />
-                      <span style={{ fontSize: 11, color: 'var(--text-2)' }}>{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <Link href={`/layanan?id=${svc.id}`} style={{ textDecoration: 'none' }}>
-                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} style={{
-                    padding: '11px', borderRadius: 10, textAlign: 'center',
-                    background: svc.popular
-                      ? 'linear-gradient(135deg, var(--purple-hi), var(--accent-dim))'
-                      : 'rgba(124,58,237,0.12)',
-                    border: svc.popular ? 'none' : '1px solid var(--border)',
-                    color: svc.popular ? '#fff' : 'var(--accent)',
-                    fontSize: 12, fontWeight: 700, cursor: 'pointer',
-                    boxShadow: svc.popular ? '0 4px 20px var(--glow-sm)' : 'none',
-                  }}>Pesan Sekarang</motion.div>
-                </Link>
+      {/* Stats Section */}
+      <section className="py-20 relative bg-zinc-950/40 border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="text-center p-6 glass-card relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none" />
+                <h3 className="text-4xl sm:text-5xl font-black text-white mb-2 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-indigo-400">
+                  {stat.value}
+                </h3>
+                <p className="text-sm sm:text-base text-gray-400 font-medium">{stat.label}</p>
               </motion.div>
-            </SI>
-          ))}
-        </Stagger>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* FAQ PREVIEW */}
-      <section style={{ position: 'relative', zIndex: 10, padding: '0 20px 80px', maxWidth: 680, margin: '0 auto' }}>
-        <FadeUp style={{ textAlign: 'center', marginBottom: 32 }}>
-          <SLabel text="FAQ" />
-          <h2 style={{ fontSize: 'clamp(22px, 4vw, 36px)', fontWeight: 800, letterSpacing: -1 }}>
-            Pertanyaan Umum
-          </h2>
-        </FadeUp>
-        <Stagger style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {defaultFAQs.slice(0, 4).map(f => (
-            <SI key={f.id}><FaqItem q={f.question} a={f.answer} /></SI>
-          ))}
-        </Stagger>
-        <FadeUp delay={0.1} style={{ textAlign: 'center', marginTop: 24 }}>
-          <Link href="/faq" style={{ textDecoration: 'none', fontSize: 13, color: 'var(--accent)', fontWeight: 700 }}>
-            Lihat semua pertanyaan
-          </Link>
-        </FadeUp>
+      {/* Why Choose Us */}
+      <section className="py-24 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-xs sm:text-sm font-extrabold tracking-widest text-indigo-400 uppercase mb-3">Keunggulan Utama</h2>
+          <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">MENGAPA MEMILIH LASTQUESTION?</h3>
+          <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
+            Kami menggabungkan seni desain premium dengan teknologi paling mutakhir untuk melipatgandakan omset bisnis Anda.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feat, i) => {
+            const Icon = feat.icon
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="glass-card p-8 flex flex-col items-start text-left group"
+              >
+                <div className="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-6 group-hover:bg-indigo-500/20 group-hover:scale-110 transition-all">
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h4 className="text-xl font-bold text-white mb-3">{feat.title}</h4>
+                <p className="text-gray-400 text-sm leading-relaxed">{feat.desc}</p>
+              </motion.div>
+            )
+          })}
+        </div>
       </section>
 
-      {/* CTA */}
-      <section style={{ position: 'relative', zIndex: 10, padding: '0 20px 40px', maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-        <FadeUp>
-          <div className="glass glow" style={{ borderRadius: 24, padding: '44px 28px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{
-              position: 'absolute', top: -60, left: '50%', transform: 'translateX(-50%)',
-              width: 280, height: 280, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%)',
-              pointerEvents: 'none',
-            }} />
-            <SLabel text="Mulai Sekarang" />
-            <h2 style={{ fontSize: 'clamp(20px, 4vw, 32px)', fontWeight: 800, letterSpacing: -0.8, marginBottom: 14 }}>
-              Siap membangun sesuatu yang nyata?
-            </h2>
-            <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 28 }}>
-              Hubungi kami sekarang dan mulai diskusi tanpa komitmen. Kami jawab dalam hitungan jam.
+      {/* How It Works (Timeline with Line) */}
+      <section className="py-24 relative bg-zinc-950/30 border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-xs sm:text-sm font-extrabold tracking-widest text-indigo-400 uppercase mb-3">Workflow Kelas Dunia</h2>
+            <h3 className="text-3xl sm:text-4xl font-black text-white mb-4">4 LANGKAH MENUJU WEBSITE IMPIAN</h3>
+            <p className="text-gray-400 max-w-2xl mx-auto text-base">
+              Proses kolaborasi transparan dan terukur untuk hasil yang presisi dan tepat waktu.
             </p>
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="https://wa.me/6289663874700" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} style={{
-                  padding: '13px 28px', borderRadius: 12,
-                  background: 'linear-gradient(135deg, var(--purple-hi), var(--accent-dim))',
-                  color: '#fff', fontSize: 13, fontWeight: 700,
-                  boxShadow: '0 4px 24px var(--glow)',
-                }}>Hubungi via WhatsApp</motion.div>
-              </a>
-              <a href="https://instagram.com/lastquestion.co" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="glass" style={{
-                  padding: '13px 22px', borderRadius: 12, color: 'var(--text-2)', fontSize: 13, fontWeight: 600,
-                }}>Follow Instagram</motion.div>
-              </a>
+          </div>
+
+          <div className="relative">
+            {/* Connecting Line */}
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500/20 via-violet-500/40 to-cyan-500/20 -translate-y-1/2 hidden lg:block" />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {steps.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="glass-card p-6 text-left relative z-10 bg-black/50"
+                >
+                  <span className="text-5xl font-black text-indigo-500/20 absolute right-4 top-4 font-mono">{item.step}</span>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-extrabold text-sm mb-6 shadow-md">
+                    {item.step}
+                  </div>
+                  <h4 className="text-lg font-bold text-white mb-2">{item.title}</h4>
+                  <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </FadeUp>
+        </div>
       </section>
 
-      <BottomNav />
-    </main>
+      {/* Tech Stack */}
+      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 className="text-xs sm:text-sm font-extrabold tracking-widest text-indigo-400 uppercase mb-3">Teknologi Mutakhir</h2>
+        <h3 className="text-2xl sm:text-4xl font-black text-white mb-12">STACK TEKNOLOGI YANG KAMI GUNAKAN</h3>
+        
+        <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+          {techStack.map((tech, i) => (
+            <span
+              key={i}
+              className="px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300 font-semibold text-sm hover:border-indigo-500/50 hover:bg-white/10 hover:text-white transition-all cursor-default shadow-sm"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-tr from-indigo-950/20 via-black to-purple-950/10" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <div className="neon-border p-8 sm:p-16">
+            <div className="neon-border-inner p-8 sm:p-12 flex flex-col items-center">
+              <h3 className="text-3xl sm:text-5xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+                SIAP MEWUJUDKAN SITUS WEB PREMIUM ANDA?
+              </h3>
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl mb-10 leading-relaxed">
+                Hubungi tim ahli kami hari ini untuk konsultasi strategis gratis senilai Rp2.500.000. Dapatkan blueprint gratis khusus untuk bisnis Anda.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+                <Link
+                  href="/kontak"
+                  className="w-full sm:w-auto px-8 py-4 rounded-full text-base font-bold btn-glow-primary flex items-center justify-center space-x-2"
+                >
+                  <span>Mulai Konsultasi</span>
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="/harga"
+                  className="w-full sm:w-auto px-8 py-4 rounded-full text-base font-bold btn-glow-secondary flex items-center justify-center"
+                >
+                  <span>Lihat Paket Harga</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Preview */}
+      <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-xs sm:text-sm font-extrabold tracking-widest text-indigo-400 uppercase mb-3">Pusat Informasi</h2>
+          <h3 className="text-3xl font-black text-white mb-4">PERTANYAAN UMUM</h3>
+        </div>
+
+        <div className="space-y-4">
+          {faqPreview.map((faq, i) => (
+            <div key={i} className="glass-card p-6 sm:p-8 text-left">
+              <h4 className="text-lg font-bold text-white mb-3 flex items-start gap-2">
+                <HelpCircle className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+                <span>{faq.q}</span>
+              </h4>
+              <p className="text-gray-400 text-sm leading-relaxed pl-7">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+        
+        <div className="text-center mt-12">
+          <Link href="/faq" className="inline-flex items-center space-x-2 text-indigo-400 hover:text-white font-bold transition-colors">
+            <span>Lihat Semua 50+ Pertanyaan</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+    </div>
   )
 }
